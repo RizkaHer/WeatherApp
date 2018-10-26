@@ -10,7 +10,7 @@
 
 @interface ViewController () <UISearchBarDelegate>
 - (IBAction)changeTemp:(id)sender;
-@property int temp;
+@property float temp;
 @property(strong,nonatomic)NSString* longitude;
 @property(strong,nonatomic)NSString* latitude;
 @property(strong,nonatomic)NSString* searchAddress;
@@ -21,8 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-  
-    
     _geography = @"-6.175110,106.865036";
     _searchLocation.delegate = self;
     [self searchBarSearchButtonClicked:_searchLocation];
@@ -31,10 +29,9 @@
 }
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-    NSLog(@"end editing");
     [_loading setHidden:YES];
+    
     if(searchBar.text.length >1){
-       
         _searchAddress = searchBar.text;
         _searchAddress = [_searchAddress stringByReplacingOccurrencesOfString:@" " withString:@"+"];
         _searchAddress = [_searchAddress stringByReplacingOccurrencesOfString:@"," withString:@"%2C"];
@@ -43,12 +40,10 @@
         [self fetchingLocation:_searchAddress];
         NSLog(@"location done: %@", _searchAddress);
         
-        
         searchBar.text = @"";
     }else{
         [self fetchingWeatherwithGeography:_geography];
     }
-        
 }
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
@@ -73,55 +68,70 @@
     [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         NSLog(@"Fetching finished location..");
+        NSString *checkCity;
         
         if(!error){
             NSDictionary *searchedLocation = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
             NSArray *result = [searchedLocation objectForKey:@"results"];
-            NSDictionary *mainResult = result [0];
             
-            NSDictionary *geometry = [mainResult objectForKey:@"geometry"];
-            self.latitude = [geometry objectForKey:@"lat"];
-            NSLog(@"latitude : %@",self.latitude);
-            self.longitude = [geometry objectForKey:@"lng"];
-            NSLog(@"longitude : %@",self.longitude);
+            //array kosong
+            if(result.firstObject != nil){
+                NSDictionary *mainResult = result [0];
             
-            self.geography = [NSString stringWithFormat:@"%@,%@",self.latitude,self.longitude];
-            
-            //city
-            NSDictionary *city = [mainResult objectForKey:@"components"];
-            NSString *type = [city objectForKey:@"_type"];
-            NSString *checkCity = [city objectForKey:type];
-            
-            //this happens because the flexibility of API result
-            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
-                checkCity = [city objectForKey:@"city"];
-            }
-            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
-                checkCity = [city objectForKey:@"town"];
-            }
-            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
-                checkCity = [city objectForKey:@"state_district"];
-            }
-            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
-                checkCity = [city objectForKey:@"region"];
-            }
-            
-            NSLog(@"%@", city);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.locationLbl.text = checkCity;
-                [self fetchingWeatherwithGeography:self.geography];
-                NSLog(@"weather done: %@", self.geography);
+                //city
+                NSDictionary *city = [mainResult objectForKey:@"components"];
+
+                // PUNYA ANDY
+                //rizka tambahin logic
                 
-            });
-            
+                if ([city objectForKey:@"city"] != nil) {
+                    checkCity = [city objectForKey:@"city"];
+                } else if ([city objectForKey:@"county"] != nil) {
+                    checkCity = [city objectForKey:@"county"];
+                }else if ([city objectForKey:@"state_district"] != nil) {
+                    checkCity = [city objectForKey:@"state_district"];
+                } else if ([city objectForKey:@"town"] != nil) {
+                    checkCity = [city objectForKey:@"town"];
+                } else {
+                    checkCity = @"Unknown";
+                }
+                
+                if(![checkCity isEqualToString:@"Unknown"]){
+                    //geography
+                    NSDictionary *geometry = [mainResult objectForKey:@"geometry"];
+                    self.latitude = [geometry objectForKey:@"lat"];
+                    self.longitude = [geometry objectForKey:@"lng"];
+                    self.geography = [NSString stringWithFormat:@"%@,%@",self.latitude,self.longitude];
+
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.locationLbl.text = checkCity;
+                        [self fetchingWeatherwithGeography:self.geography];
+                        NSLog(@"weather done: %@", self.geography);
+                    });
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self showingSetError];
+                    });
+                }
+            }
         }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showingSetError];
+            });
             NSLog(@"ERROR %@",error);
         }
+        
     }]resume] ;
 }
 
-
+-(void)showingSetError{
+    [self.loading stopAnimating];
+    [self.loading setHidden:YES];
+    [self.locationLbl setHidden:NO];
+    self.locationLbl.text = @"Unknown";
+    [self.degreeLbl setHidden:YES];
+    [self.weatherLbl setHidden:YES];
+}
 -(void)fetchingWeatherwithGeography:(NSString*)geo{
     NSLog(@"start fetching weather..");
     NSString *urlString = [NSString stringWithFormat:@"https://api.darksky.net/forecast/ae0689290d9d2c94ad502883d593a295/%@?exclude=minutely,hourly,flags",geo];
@@ -137,13 +147,13 @@
             
             NSDictionary *currently = [weather objectForKey:@"currently"];
         
-            self.temp = [[currently objectForKey:@"temperature"] intValue];
-            NSLog(@"temp : %i",self.temp);
+            self.temp = [[currently objectForKey:@"temperature"] floatValue];
+            NSLog(@"temp : %f",self.temp);
         
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.weatherLbl.text = [currently objectForKey:@"summary"];
-                self.degreeLbl.text =[NSString stringWithFormat:@"%i",self.temp];
+                self.degreeLbl.text =[NSString stringWithFormat:@"%.2f",self.temp];
                 NSLog(@"degree : %@",self.degreeLbl.text);
                 [self.loading stopAnimating];
                 [self.loading setHidden:YES];
@@ -162,15 +172,14 @@
     [super didReceiveMemoryWarning];
 }
 
-
 - (IBAction)changeTemp:(id)sender {
     if(_temperatureSet.selectedSegmentIndex == 0 ){
-        int fahrenheit = _temp;
-        NSLog(@"%i", fahrenheit);
-        _degreeLbl.text =[NSString stringWithFormat:@"%i",fahrenheit];
+        float fahrenheit = _temp;
+        NSLog(@"%f", fahrenheit);
+        _degreeLbl.text =[NSString stringWithFormat:@"%.2f",fahrenheit];
     }else{
-        int celcius = (_temp-32)/9*5;
-        _degreeLbl.text =[NSString stringWithFormat:@"%i",celcius];
+        float celcius = (((_temp-32)/9)*5);
+        _degreeLbl.text =[NSString stringWithFormat:@"%.2f",celcius];
     }
 }
 @end
