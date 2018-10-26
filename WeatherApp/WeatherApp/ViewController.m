@@ -21,16 +21,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+  
+    
     _geography = @"-6.175110,106.865036";
     _searchLocation.delegate = self;
     [self searchBarSearchButtonClicked:_searchLocation];
     [self searchBarCancelButtonClicked:_searchLocation];
+    
 }
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     NSLog(@"end editing");
+    [_loading setHidden:YES];
     if(searchBar.text.length >1){
-        
+       
         _searchAddress = searchBar.text;
         _searchAddress = [_searchAddress stringByReplacingOccurrencesOfString:@" " withString:@"+"];
         _searchAddress = [_searchAddress stringByReplacingOccurrencesOfString:@"," withString:@"%2C"];
@@ -38,6 +42,7 @@
         NSLog(@"search loc: %@", _searchAddress);
         [self fetchingLocation:_searchAddress];
         NSLog(@"location done: %@", _searchAddress);
+        
         
         searchBar.text = @"";
     }else{
@@ -55,6 +60,13 @@
 
 -(void)fetchingLocation:(NSString*)searchLoc{
     NSLog(@"start fetching location..");
+    
+    [_loading startAnimating];
+    [_degreeLbl setHidden:YES];
+    [_loading setHidden:NO];
+    [_weatherLbl setHidden:YES];
+    [_locationLbl setHidden:YES];
+    
     NSString *urlString = [NSString stringWithFormat:@"https://api.opencagedata.com/geocode/v1/json?q=%@&key=481025d551544a41bbf11e717bfb7fce&pretty=1",searchLoc];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLSession *session = [NSURLSession sharedSession];
@@ -64,7 +76,7 @@
         
         if(!error){
             NSDictionary *searchedLocation = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
+    
             NSArray *result = [searchedLocation objectForKey:@"results"];
             NSDictionary *mainResult = result [0];
             
@@ -78,10 +90,29 @@
             
             //city
             NSDictionary *city = [mainResult objectForKey:@"components"];
+            NSString *type = [city objectForKey:@"_type"];
+            NSString *checkCity = [city objectForKey:type];
+            
+            //this happens because the flexibility of API result
+            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
+                checkCity = [city objectForKey:@"city"];
+            }
+            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
+                checkCity = [city objectForKey:@"town"];
+            }
+            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
+                checkCity = [city objectForKey:@"state_district"];
+            }
+            if(checkCity == nil|| [checkCity isEqualToString:@"postcode"]){
+                checkCity = [city objectForKey:@"region"];
+            }
+            
+            NSLog(@"%@", city);
             dispatch_async(dispatch_get_main_queue(), ^{
-                 self.locationLbl.text = [city objectForKey:@"city"];
+                self.locationLbl.text = checkCity;
                 [self fetchingWeatherwithGeography:self.geography];
                 NSLog(@"weather done: %@", self.geography);
+                
             });
             
         }else{
@@ -114,6 +145,11 @@
                 self.weatherLbl.text = [currently objectForKey:@"summary"];
                 self.degreeLbl.text =[NSString stringWithFormat:@"%i",self.temp];
                 NSLog(@"degree : %@",self.degreeLbl.text);
+                [self.loading stopAnimating];
+                [self.loading setHidden:YES];
+                [self.degreeLbl setHidden:NO];
+                [self.weatherLbl setHidden:NO];
+                [self.locationLbl setHidden:NO];
             });
         }else{
             NSLog(@"ERROR %@",error);

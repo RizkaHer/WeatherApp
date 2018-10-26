@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *degreeLbl;
 @property (strong, nonatomic) IBOutlet UILabel *weatherLbl;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *temperatureSet;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loading;
 
 
 @end
