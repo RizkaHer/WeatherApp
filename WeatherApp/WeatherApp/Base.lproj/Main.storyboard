@@ -21,23 +21,22 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="city" translatesAutoresizingMaskIntoConstraints="NO" id="NMG-XF-ClA">
                                 <rect key="frame" x="-0.5" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TuV-s2-Yso">
-                                <rect key="frame" x="122" y="268.5" width="130" height="130"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TuV-s2-Yso">
+                                <rect key="frame" x="117" y="263.5" width="140" height="140"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="130" id="FZX-bR-nCL"/>
-                                    <constraint firstAttribute="height" constant="130" id="jrE-Nq-Ldh"/>
+                                    <constraint firstAttribute="width" constant="140" id="FZX-bR-nCL"/>
+                                    <constraint firstAttribute="height" constant="140" id="jrE-Nq-Ldh"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="105"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="100"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rain" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jXD-bW-ua6">
-                                <rect key="frame" x="62.5" y="403.5" width="250" height="40"/>
+                                <rect key="frame" x="155" y="408.5" width="66" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="250" id="GTm-1m-pxb"/>
                                     <constraint firstAttribute="height" constant="40" id="Zll-mn-IVq"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="45"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -65,7 +64,7 @@
                                 <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <size key="shadowOffset" width="0.0" height="-2"/>
                             </label>
-                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Location" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aA9-tQ-25e">
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="City Location" showsSearchResultsButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aA9-tQ-25e">
                                 <rect key="frame" x="0.0" y="45" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
@@ -76,8 +75,8 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="aA9-tQ-25e" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="16U-iM-XJa"/>
                             <constraint firstItem="NMG-XF-ClA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3GL-FO-1Lk"/>
-                            <constraint firstItem="aA9-tQ-25e" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="8ga-Pp-2uh"/>
                             <constraint firstItem="NMG-XF-ClA" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="FEW-Ma-748"/>
                             <constraint firstItem="NMG-XF-ClA" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="J39-cs-5WV"/>
                             <constraint firstItem="TuV-s2-Yso" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="K3f-cE-Puf"/>
@@ -85,13 +84,13 @@
                             <constraint firstItem="966-lI-9kj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="V57-UI-GmI"/>
                             <constraint firstItem="aA9-tQ-25e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="25" id="Wn8-Cg-mJm"/>
                             <constraint firstItem="YlA-Sh-8O9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="75" id="aqS-Ua-HBH"/>
+                            <constraint firstItem="aA9-tQ-25e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dDs-Mm-Kuf"/>
                             <constraint firstItem="YlA-Sh-8O9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hPJ-lG-mCS"/>
                             <constraint firstItem="jXD-bW-ua6" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="iSw-9q-p7k"/>
                             <constraint firstItem="jXD-bW-ua6" firstAttribute="top" secondItem="TuV-s2-Yso" secondAttribute="bottom" constant="5" id="imo-kK-S0S"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YlA-Sh-8O9" secondAttribute="trailing" constant="75" id="jHK-S5-o1e"/>
                             <constraint firstItem="TuV-s2-Yso" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="kdH-9n-Dnb"/>
                             <constraint firstItem="YlA-Sh-8O9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="150" id="l8d-aM-Fsm"/>
-                            <constraint firstItem="aA9-tQ-25e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vsf-Th-aaj"/>
                             <constraint firstItem="NMG-XF-ClA" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="wCI-NN-Oxv"/>
                             <constraint firstItem="aA9-tQ-25e" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="x9p-YM-e0B"/>
                         </constraints>
@@ -107,7 +106,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="145" y="-34"/>
+            <point key="canvasLocation" x="332" y="-14"/>
         </scene>
     </scenes>
     <resources>

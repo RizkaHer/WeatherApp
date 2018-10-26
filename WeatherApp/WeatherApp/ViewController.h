@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+
+@interface ViewController : UIViewController<UISearchBarDelegate>
+
 @property (strong, nonatomic) IBOutlet UISearchBar *searchLocation;
 @property (strong, nonatomic) IBOutlet UILabel *locationLbl;
 @property (strong, nonatomic) IBOutlet UILabel *degreeLbl;
