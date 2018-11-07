@@ -18,6 +18,16 @@
 @property (strong, nonatomic) IBOutlet UISegmentedControl *temperatureSet;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loading;
 
+@property float temp;
+@property(strong,nonatomic)NSString* searchAddress;
+@property(strong, nonatomic)NSString* geography;
+@property(strong, nonatomic)NSString* condition;
+@property (strong, nonatomic)NSString* checkCity;
 
+-(NSString*)changeIntoUrlFormat:(NSString*)searchLocation;
+-(void)fetchingLocation:(NSString*)searchLoc;
+-(void)fetchingWeatherwithGeography:(NSString*)geo;
+-(void)processJsonLocation:(NSData*) data;
+-(void)processJsonWeather:(NSData*)data;
 @end
 
